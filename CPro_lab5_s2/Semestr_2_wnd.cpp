@@ -1,24 +1,65 @@
-#include "include.h"
+п»ї#include "include.h"
 
 LRESULT CALLBACK LAB6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	static HWND Edit;
+	switch (message)
+	{
+	case WM_CREATE: 				
+		Edit = CreateWindow("Edit", NULL, WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_BORDER | WS_VSCROLL | ES_MULTILINE,
+			10, 10, 480, 480, hWnd, (HMENU)ID_EDIT3, GetModuleHandle(NULL), NULL);
+		break;
+
+	case WM_COMMAND:
+		switch (wParam)
+		{
+		case ID_FILE_CREATE:
+			CreateNewFile(hWnd);
+			break;
+
+		case ID_FILE_OPEN:
+			OpenFile(hWnd, Edit);
+			break;
+
+		case ID_FILE_SAVE:
+			InitOpenDialog(hWnd, "Text file (.txt)\0*.txt\0");
+			SaveFile(hWnd);
+			break;
+
+		case ID_FILE_DELETE:
+			DeleteMyFile(hWnd);
+			break;
+		}
+		break;
+
+	case WM_DESTROY: 				
+		ShowWindow(hWnd, SW_HIDE);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
+
+LRESULT CALLBACK LAB7(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
 	PAINTSTRUCT ps;
 	HDC hdc;
-	RECT rt;
+	static RECT rt;
 	static HWND edit;
 	static char buffer[64];
 	int num;
 	switch (message)
 	{
-	case WM_CREATE: 				//Повідомлення приходить при створенні вік-на
+	case WM_CREATE: 	
+		rt = { 120, 10, 300, 25 };
 		edit = CreateWindow("edit", NULL, WS_VISIBLE | WS_CHILD | EN_SETFOCUS, 10, 10, 100, 18, hWnd, NULL, GetModuleHandle(NULL), NULL);
-		CreateWindow("button", "Фибоначи", WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 10, 35, 100, 25, hWnd, (HMENU)ID_BUTTON1, GetModuleHandle(NULL), NULL);
-		CreateWindow("button", "Факториал", WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 10, 65, 100, 25, hWnd, (HMENU)ID_BUTTON2, GetModuleHandle(NULL), NULL);
+		CreateWindow("button", "Р¤РёР±РѕРЅР°С‡Рё", WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 10, 35, 100, 25, hWnd, (HMENU)ID_BUTTON3, GetModuleHandle(NULL), NULL);
+		CreateWindow("button", "Р¤Р°РєС‚РѕСЂРёР°Р»", WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 10, 65, 100, 25, hWnd, (HMENU)ID_BUTTON4, GetModuleHandle(NULL), NULL);
 		break;
 
-	case WM_PAINT: 				//Перемалювати вікно
-		hdc = BeginPaint(hWnd, &ps); 	//Почати графічний вивід	
-		rt = { 120,10,300,25 };
+	case WM_PAINT: 			
+		hdc = BeginPaint(hWnd, &ps); 
 		DrawText(hdc, buffer, -1, &rt, DT_SINGLELINE);
 		EndPaint(hWnd, &ps);
 		break;
@@ -30,7 +71,7 @@ LRESULT CALLBACK LAB6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			GetWindowText(edit, buffer, 16);
 			num = atoi(buffer);
 			wsprintf(buffer, "%i", fibonach(num));
-			InvalidateRect(hWnd, NULL, FALSE);
+			InvalidateRect(hWnd, NULL, TRUE);
 			break;
 
 		case ID_BUTTON4:
@@ -49,17 +90,16 @@ LRESULT CALLBACK LAB6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ReleaseDC(hWnd, hdc);
 		break;
 
-	case WM_DESTROY: 				//Завершення роботи
+	case WM_DESTROY: 				
 		ShowWindow(hWnd, SW_HIDE);
 		break;
 	default:
-		//Обробка повідомлень, які не оброблені користувачем
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
 }
 
-LRESULT CALLBACK LAB7(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK LAB8(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
@@ -158,13 +198,12 @@ LRESULT CALLBACK LAB7(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CALLBACK LAB8(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK LAB9(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;
 	PAINTSTRUCT ps;
 	static HWND Edit[3];
 	char *first, *second;
-	std::string temp;
 
 	switch (message)
 	{

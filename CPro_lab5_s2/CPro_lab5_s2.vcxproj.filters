@@ -44,9 +44,6 @@
     <ClInclude Include="OpenLab.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Debug\resource.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon3.ico">

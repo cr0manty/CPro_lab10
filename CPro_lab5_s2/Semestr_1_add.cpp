@@ -2,13 +2,13 @@
 
 void trayInit(HWND hWnd, NOTIFYICONDATA &tray)
 {
-	tray.cbSize = sizeof(NOTIFYICONDATA);//установка размера
-	tray.hWnd = hWnd; //указать окно
-	tray.uFlags = NIF_ICON;//типо который будет в трее(только иконка)
-	tray.hIcon = LoadIcon(NULL, IDI_APPLICATION);//назначаем иконку
+	tray.cbSize = sizeof(NOTIFYICONDATA);
+	tray.hWnd = hWnd; 
+	tray.uFlags = NIF_ICON;
+	tray.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 }
 
-BOOL InitOpenDialog(OPENFILENAME &ofn, HWND hWnd, const char *_type, char * fileName)
+BOOL InitOpenDialog(HWND hWnd, const char *_type)
 {
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
@@ -25,22 +25,20 @@ BOOL InitOpenDialog(OPENFILENAME &ofn, HWND hWnd, const char *_type, char * file
 	return TRUE;
 }
 
-void ThreadStart(HWND hWnd)
+void ThreadStart(HWND hWnd, HWND * _text)
 {
 	HDC hdc;
 	hdc = GetDC(hWnd);
 
-	//создание 4 потоков
 	HANDLE thread[4];
-	thread[0] = CreateThread(NULL, 0, thread1, NULL, 0, &threadID[0]);
-	thread[1] = CreateThread(NULL, 0, thread2, NULL, 0, &threadID[1]);
-	thread[2] = CreateThread(NULL, 0, thread3, hdc, 0, &threadID[2]); // hdc - параметр передающийся в поток
-	thread[3] = CreateThread(NULL, 0, thread4, NULL, 0, &threadID[3]);
+	thread[0] = CreateThread(NULL, 0, thread1, _text[0], 0, &threadID[0]);
+	thread[1] = CreateThread(NULL, 0, thread2, _text[1], 0, &threadID[1]);
+	thread[2] = CreateThread(NULL, 0, thread3, hdc, 0, &threadID[2]); 
+	thread[3] = CreateThread(NULL, 0, thread4, _text[2], 0, &threadID[3]);
 }
 
 void ThreadStop()
 {
-	//посылаем 4 сообщения в потоки которые прервут выполнение цикла
 	for (int i = 0; i < 4; i++)
 		PostThreadMessage(threadID[i], WM_QUIT, 0, 0);
 }
@@ -51,9 +49,10 @@ unsigned long long Fibonacci_nums(unsigned long long n)
 	return Fibonacci_nums(n - 1) + Fibonacci_nums(n - 2);
 }
 
-DWORD WINAPI thread1(LPVOID)
+DWORD WINAPI thread1(LPVOID _text)
 {
 	MSG msg;
+	HWND Text = (HWND)_text;
 	ZeroMemory(&msg, sizeof(MSG));
 	static int sequence = 0;
 	while (true) {
@@ -61,21 +60,22 @@ DWORD WINAPI thread1(LPVOID)
 			break;
 
 		char buffer[20];
-		int EditTextlen = GetWindowTextLength(Text[0]);
+		int EditTextlen = GetWindowTextLength(Text);
 		wsprintf(buffer, "%i", sequence++);
 
-		SendMessage(Text[0], EM_SETSEL, EditTextlen, EditTextlen);
-		SendMessage(Text[0], EM_REPLACESEL, 0, (LPARAM)buffer);
-		SendMessage(Text[0], EM_REPLACESEL, 0, (LPARAM)", ");
+		SendMessage(Text, EM_SETSEL, EditTextlen, EditTextlen);
+		SendMessage(Text, EM_REPLACESEL, 0, (LPARAM)buffer);
+		SendMessage(Text, EM_REPLACESEL, 0, (LPARAM)", ");
 		threadCounter[0]++;
 		Sleep(500);
 	}
 	ExitThread(0);
 }
 
-DWORD WINAPI thread2(LPVOID)
+DWORD WINAPI thread2(LPVOID _text)
 {
 	MSG msg;
+	HWND Text = (HWND)_text;
 	ZeroMemory(&msg, sizeof(MSG));
 	static unsigned long long sequence;
 	while (true) {
@@ -83,12 +83,12 @@ DWORD WINAPI thread2(LPVOID)
 			break;
 
 		char buffer[20] = { 0 };
-		int EditTextlen = GetWindowTextLength(Text[0]);
+		int EditTextlen = GetWindowTextLength(Text);
 		wsprintf(buffer, "%i", Fibonacci_nums(sequence++));
 
-		SendMessage(Text[0], EM_SETSEL, EditTextlen, EditTextlen);
-		SendMessage(Text[1], EM_REPLACESEL, 0, (LPARAM)buffer);
-		SendMessage(Text[1], EM_REPLACESEL, 0, (LPARAM)", ");
+		SendMessage(Text, EM_SETSEL, EditTextlen, EditTextlen);
+		SendMessage(Text, EM_REPLACESEL, 0, (LPARAM)buffer);
+		SendMessage(Text, EM_REPLACESEL, 0, (LPARAM)", ");
 		threadCounter[1]++;
 		Sleep(1500);
 	}
@@ -117,9 +117,10 @@ DWORD WINAPI thread3(LPVOID hdc)
 	return 0;
 }
 
-DWORD WINAPI thread4(LPVOID)
+DWORD WINAPI thread4(LPVOID _text)
 {
 	MSG msg;
+	HWND Text = (HWND)_text;
 	ZeroMemory(&msg, sizeof(MSG));
 	while (true) {
 		if (PeekMessage(&msg, NULL, WM_QUIT, WM_QUIT, PM_REMOVE))
@@ -135,7 +136,7 @@ DWORD WINAPI thread4(LPVOID)
 			buffer += buff;
 			buffer += '\n';
 		}
-		SetWindowText(Text[2], buffer.c_str());
+		SetWindowText(Text, buffer.c_str());
 		Sleep(500);
 	}
 	return 0;
@@ -149,39 +150,37 @@ void closeProgram(HWND hWnd, DWORD _exitCode) {
 	ShowWindow(hWnd, SW_HIDE);
 }
 
-void ReadFromFile(HWND ListBox, HWND VScroll, HWND hWnd, char * fileName, bool bytes) {
-	//инициализация OpenFileDialog для откртия в бинарном виде и в обычном
-	OPENFILENAME ofn;       // Диалоговое окно открытия файла
+void ReadFromFile(HWND ListBox, HWND hWnd, bool bytes) {
 	if (bytes)
-		InitOpenDialog(ofn, hWnd, "All file (*)\0*.*\0", fileName);
-	else
-		InitOpenDialog(ofn, hWnd, "Text file (.txt)\0*.txt\0", fileName);
+		InitOpenDialog(hWnd, "All file (*)\0*.*\0");
 
-	GetOpenFileName(&ofn);// открытие openFileDialog
-	SendMessage(ListBox, LB_RESETCONTENT, 0, 0); //очищяет listbox
-	DWORD NumOfReadByte;//Кол-во прочитаных байтов, если 0 то уже конец файла
+	else
+		InitOpenDialog(hWnd, "Text file (.txt)\0*.txt\0");
+
+	GetOpenFileName(&ofn);
+	SendMessage(ListBox, LB_RESETCONTENT, 0, 0); 
+	DWORD NumOfReadByte;
 	HANDLE myFile = CreateFile(
-		fileName, //имя файла
-		GENERIC_READ,  //в режим чтения GENERIC_WRITE то в запись 
+		fileName, 
+		GENERIC_READ, 
 		FILE_SHARE_READ, NULL,
-		OPEN_EXISTING, //открыаем УЖЕ СУЩЕСТВУЮЩИЙ файл
+		OPEN_EXISTING, 
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
-	int size = 0;
+
 	char buff[100];
 	if (myFile != INVALID_HANDLE_VALUE)
 	{
-		do //пока не конец файла
+		do 
 		{
 			ReadFile(myFile, buff, 99, &NumOfReadByte, NULL);
 			if (!NumOfReadByte)
-				break; //выход из цикла
+				break;
 
-			SendMessage(ListBox, LB_ADDSTRING, 0, (LPARAM)buff);//добавить строку в listbox
+			SendMessage(ListBox, LB_ADDSTRING, 0, (LPARAM)buff);
 			buff[0] = 0;
-			size++;
+
 		} while (NumOfReadByte);
 	}
-	SetScrollRange(VScroll, SB_CTL, 0, size * 20, TRUE);
-	CloseHandle(myFile); //закрыть дискрептор в данном случае для файла.
+	CloseHandle(myFile);
 }

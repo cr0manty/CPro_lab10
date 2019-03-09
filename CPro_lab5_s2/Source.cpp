@@ -40,22 +40,22 @@ LRESULT CALLBACK MAINFUNC(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			lab = new OpenLab(LAB3, "Lab3", "Lab3", { 120, 120, 520, 540 });
 			break;
 		case ID_MENU_LAB4:
-			lab = new OpenLab(LAB4, "Lab4", "Lab4", { 250, 250, 500, 500 });
+			lab = new OpenLab(LAB4, "Lab4", "Lab4", { 250, 250, 480, 495 });
 			break;
 		case ID_MENU_LAB5:
 			lab = new OpenLab(LAB5, "Lab5", "Lab5", { 100, 100, 515, 550, }, LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_MENU4)));
 			break;
 		case ID_MENU_LAB6:
-			lab = new OpenLab(LAB6, "Lab6", "Lab6", { CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT }, NULL, GRAY_BRUSH);
+			lab = new OpenLab(LAB6, "Lab6", "Lab6", { 250, 250, 517, 562}, LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_MENU5)));
 			break;
 		case ID_MENU_LAB7:
-			lab = new OpenLab(LAB7, "Lab7", "Lab7", { 200, 200, 490, 220 }, NULL, GRAY_BRUSH);
+			lab = new OpenLab(LAB7, "Lab7", "Lab7", { CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT }, NULL, GRAY_BRUSH);
 			break;
 		case ID_MENU_LAB8:
-			lab = new OpenLab(LAB8, "Lab8", "Lab8", { 200, 200, 300, 250 }, NULL, GRAY_BRUSH);
+			lab = new OpenLab(LAB8, "Lab8", "Lab8", { 200, 200, 490, 220 }, NULL, GRAY_BRUSH);
 			break;
 		case ID_MENU_LAB9:
-			//lab = new OpenLab(LAB9, "Lab9", "Lab9", { 400, 30, 100, 300 });
+			lab = new OpenLab(LAB9, "Lab9", "Lab9", { 200, 200, 300, 250 }, NULL, GRAY_BRUSH);
 			break;
 		case ID_ABOUT_LAB:
 			DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(ID_DLG_ABOUT), hWnd, (DLGPROC)INFODLG);

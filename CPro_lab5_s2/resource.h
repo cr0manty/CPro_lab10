@@ -72,6 +72,16 @@
 #define ID_40011                        41011
 #define ID_THREED_RESUME                41012
 #define ID_THREED_STOP                  41013
+#define IDR_MENU5                       10111
+#define IDD_DIALOG1                     10211
+#define ID_EDIT3	                    10212
+#define ID_FILE_OPENFILE                42001
+#define ID_FILE_OPENFILE40002           42002
+#define ID_FILE_SAVE                    42003
+#define ID_FILE_DELETE                  42004
+#define ID_FILE_CREATE                  42005
+#define ID_FILE_OPEN                    42006
+
 
 // Next default values for new objects
 // 
