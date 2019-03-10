@@ -52,3 +52,8 @@ OpenLab::operator bool() const
 {
 	return hWnd;
 }
+
+OpenLab::~OpenLab()
+{
+	ShowWindow(hWnd, SW_HIDE);
+}

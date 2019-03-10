@@ -33,8 +33,8 @@ LRESULT CALLBACK LAB6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY: 				
-		ShowWindow(hWnd, SW_HIDE);
 		break;
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -91,8 +91,8 @@ LRESULT CALLBACK LAB7(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY: 				
-		ShowWindow(hWnd, SW_HIDE);
 		break;
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -121,8 +121,7 @@ LRESULT CALLBACK LAB8(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			25, 25, 175, 25, hWnd, NULL, NULL, NULL);
 		Edit[1] = CreateWindow("Edit", NULL, WS_VISIBLE | WS_CHILD | WS_BORDER,
 			25, 65, 175, 25, hWnd, NULL, NULL, NULL);
-		_asm
-		{
+		_asm {
 			mov b_eax, eax
 			mov b_edx, edx
 		}
@@ -189,7 +188,6 @@ LRESULT CALLBACK LAB8(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY:
-		ShowWindow(hWnd, SW_HIDE);
 		break;
 
 	default:
@@ -289,7 +287,6 @@ LRESULT CALLBACK LAB9(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY:
-		ShowWindow(hWnd, SW_HIDE);
 		break;
 
 	default:

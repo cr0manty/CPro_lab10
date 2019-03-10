@@ -14,4 +14,5 @@ class OpenLab
 public:
 	OpenLab(WNDPROC, const char *, const char*, RECT, HMENU = NULL, int = WHITE_BRUSH);
 	operator bool() const;
+	~OpenLab();
 };

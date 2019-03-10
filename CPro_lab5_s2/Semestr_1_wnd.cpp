@@ -129,7 +129,6 @@ LRESULT CALLBACK LAB1(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_DESTROY: 
 		Shell_NotifyIcon(NIM_DELETE, &tray);
-		ShowWindow(hWnd, SW_HIDE);
 		break;
 
 	default:
@@ -286,8 +285,8 @@ LRESULT CALLBACK LAB3(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY:
-		ShowWindow(hWnd, SW_HIDE);
 		break;
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -324,8 +323,8 @@ LRESULT CALLBACK LAB4(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY: 
-		ShowWindow(hWnd, SW_HIDE);
 		break;
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -385,8 +384,9 @@ LRESULT CALLBACK LAB5(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_DESTROY: 			
-		closeProgram(hWnd, ExitCode);
+		ThreadStop();
 		break;
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

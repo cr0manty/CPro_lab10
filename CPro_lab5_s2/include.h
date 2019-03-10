@@ -33,10 +33,10 @@ void ReadFromFile(HWND, HWND, bool = false);
 void ThreadStart(HWND, HWND*);
 void ThreadStop();
 void closeProgram(HWND, DWORD);
+
 extern "C" __declspec(dllimport) void rectangle_paint(HDC &, POINT);
 extern "C" __declspec(dllimport) long long factorial(int);
 extern "C" __declspec(dllimport) long long fibonach(int);
-
 BOOL InitOpenDialog(HWND);
 void CreateNewFile(HWND);
 void OpenFile(HWND, HWND);
@@ -49,8 +49,8 @@ void _strcat(char *, const char *);
 bool _strcmp(const char *, const char *);
 void print(HDC &, POINT, int, int, const char *);
 
-LRESULT CALLBACK MAINFUNC(HWND, UINT, WPARAM, LPARAM);
 BOOL CALLBACK INFODLG(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK MAINFUNC(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK LAB1(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK LAB2(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK LAB3(HWND, UINT, WPARAM, LPARAM);
