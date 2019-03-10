@@ -384,7 +384,7 @@ LRESULT CALLBACK LAB5(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_DESTROY: 			
-		ThreadStop();
+		closeProgram(hWnd, ExitCode);
 		break;
 
 	default:

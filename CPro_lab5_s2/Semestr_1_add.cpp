@@ -27,13 +27,10 @@ BOOL InitOpenDialog(HWND hWnd, const char *_type)
 
 void ThreadStart(HWND hWnd, HWND * _text)
 {
-	HDC hdc;
-	hdc = GetDC(hWnd);
-
 	HANDLE thread[4];
 	thread[0] = CreateThread(NULL, 0, thread1, _text[0], 0, &threadID[0]);
 	thread[1] = CreateThread(NULL, 0, thread2, _text[1], 0, &threadID[1]);
-	thread[2] = CreateThread(NULL, 0, thread3, hdc, 0, &threadID[2]); 
+	thread[2] = CreateThread(NULL, 0, thread3, hWnd, 0, &threadID[2]); 
 	thread[3] = CreateThread(NULL, 0, thread4, _text[2], 0, &threadID[3]);
 }
 
@@ -45,7 +42,9 @@ void ThreadStop()
 
 unsigned long long Fibonacci_nums(unsigned long long n)
 {
-	if (n < 2) return n;
+	if (n < 2) 
+		return n;
+
 	return Fibonacci_nums(n - 1) + Fibonacci_nums(n - 2);
 }
 
@@ -95,8 +94,10 @@ DWORD WINAPI thread2(LPVOID _text)
 	return 0;
 }
 
-DWORD WINAPI thread3(LPVOID hdc)
+DWORD WINAPI thread3(LPVOID hWnd)
 {
+	HDC hdc;
+	hdc = GetDC((HWND)hWnd);
 	SetBkColor((HDC)hdc, RGB(255, 255, 255));
 	MSG msg;
 	ZeroMemory(&msg, sizeof(MSG));
@@ -114,6 +115,7 @@ DWORD WINAPI thread3(LPVOID hdc)
 		threadCounter[2]++;
 		Sleep(1000);
 	}
+	ReleaseDC((HWND)hWnd, hdc);
 	return 0;
 }
 
@@ -142,15 +144,16 @@ DWORD WINAPI thread4(LPVOID _text)
 	return 0;
 }
 
-void closeProgram(HWND hWnd, DWORD _exitCode) {
+void closeProgram(HWND hWnd, DWORD _exitCode) 
+{
 	if (_exitCode != STILL_ACTIVE)
 		TerminateProcess(pi.hProcess, -1);
 
 	ThreadStop();
-	ShowWindow(hWnd, SW_HIDE);
 }
 
-void ReadFromFile(HWND ListBox, HWND hWnd, bool bytes) {
+void ReadFromFile(HWND ListBox, HWND hWnd, bool bytes)
+{
 	if (bytes)
 		InitOpenDialog(hWnd, "All file (*)\0*.*\0");
 
@@ -169,18 +172,15 @@ void ReadFromFile(HWND ListBox, HWND hWnd, bool bytes) {
 		NULL);
 
 	char buff[100];
-	if (myFile != INVALID_HANDLE_VALUE)
-	{
-		do 
-		{
-			ReadFile(myFile, buff, 99, &NumOfReadByte, NULL);
-			if (!NumOfReadByte)
-				break;
+	if (myFile != INVALID_HANDLE_VALUE) {
+		int len = GetFileSize(myFile, NULL);
+		char *buffer = new char[len + 1];
 
-			SendMessage(ListBox, LB_ADDSTRING, 0, (LPARAM)buff);
-			buff[0] = 0;
+		ReadFile(myFile, buffer, len, NULL, NULL);
+		buffer[len] = '\0';
 
-		} while (NumOfReadByte);
+		SendMessage(ListBox, EM_REPLACESEL, 0, (LPARAM)buffer);
+		delete[] buffer;
 	}
 	CloseHandle(myFile);
 }

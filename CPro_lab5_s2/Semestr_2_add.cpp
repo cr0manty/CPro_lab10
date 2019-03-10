@@ -116,7 +116,6 @@ void OpenFile(HWND hWnd, HWND Edit)
 
 void CreateNewFile(HWND hWnd)
 {
-
 	DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG1), hWnd, (DLGPROC)CreateMyNewFile);
 	WIN32_FIND_DATA FindFileData;
 	HANDLE hFind;

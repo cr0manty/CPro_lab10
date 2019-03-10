@@ -1,4 +1,5 @@
 ﻿#include "include.h"
+#define _SEMESTR_2
 
 LRESULT CALLBACK LAB6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -47,11 +48,12 @@ LRESULT CALLBACK LAB7(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 	static RECT rt;
 	static HWND edit;
-	static char buffer[64];
+	static char *buffer;
 	int num;
 	switch (message)
 	{
-	case WM_CREATE: 	
+	case WM_CREATE: 
+		buffer = new char[64];
 		rt = { 120, 10, 300, 25 };
 		edit = CreateWindow("edit", NULL, WS_VISIBLE | WS_CHILD | EN_SETFOCUS, 10, 10, 100, 18, hWnd, NULL, GetModuleHandle(NULL), NULL);
 		CreateWindow("button", "Фибоначи", WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 10, 35, 100, 25, hWnd, (HMENU)ID_BUTTON3, GetModuleHandle(NULL), NULL);
@@ -91,6 +93,7 @@ LRESULT CALLBACK LAB7(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY: 				
+		delete[] buffer;
 		break;
 
 	default:
@@ -133,7 +136,7 @@ LRESULT CALLBACK LAB8(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if (click) {
 			buffer = new char[20];
 			print(hdc, { 350, 20 }, a_eax, a_edx, "After: ");
-			TextOut(hdc, 25, 135, buffer, wsprintf(buffer, "Result = %5d", result));
+			TextOut(hdc, 25, 135, buffer, wsprintf(buffer, "Result = %d", result));
 			delete[] buffer;
 		}
 		EndPaint(hWnd, &ps);
@@ -224,7 +227,6 @@ LRESULT CALLBACK LAB9(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		first = new char[64];
 		TextOut(hdc, 5, 30, "Str 1:", 6);
 		TextOut(hdc, 5, 60, "Str 2:", 6);
 		TextOut(hdc, 5, 90, "Result:", 7);
