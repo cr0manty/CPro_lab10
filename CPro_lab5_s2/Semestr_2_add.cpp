@@ -142,15 +142,45 @@ bool tchar_strcmp(TCHAR *_first, TCHAR *_second)
 	return true;
 }
 
-void print(HDC & _hdc, POINT _point, int _eax, int _edx, const char * _type)
+void print(HDC & _hdc, POINT _point, int _eax, int _edx, int _result)
 {
-	char * buffer = new char[20];
-	TextOut(_hdc, _point.x, _point.y, buffer, wsprintf(buffer, _type));
-	TextOut(_hdc, _point.x, _point.y + 20, buffer, wsprintf(buffer, "EAX - %d", _eax));
-	TextOut(_hdc, _point.x, _point.y + 40, buffer, wsprintf(buffer, "EDX - %d", _edx));
-
+	char *temp = new char[10], 
+		*buffer = asm_print(_eax);
+	TextOut(_hdc, _point.x + 70, _point.y + 20, buffer, 33);
+	TextOut(_hdc, _point.x, _point.y + 20, temp, wsprintf(temp, "ECX - "));
 	delete[] buffer;
+
+	buffer = asm_print(_edx);
+	TextOut(_hdc, _point.x + 70, _point.y + 40, buffer, 33);
+	TextOut(_hdc, _point.x, _point.y + 40, temp, wsprintf(temp, "EDX - "));
+	delete[] buffer;
+
+	buffer = asm_print(_result);
+	TextOut(_hdc, _point.x + 70, _point.y + 60, buffer, 33);
+	TextOut(_hdc, _point.x, _point.y + 60, temp, wsprintf(temp, "Result - "));
+	delete[] buffer;
+	delete[] temp;
 }
+
+char * asm_print(int _num)
+{
+	char * temp = new char[35];
+	
+	__asm
+	{
+		mov edx, _num;
+		mov esi, temp;
+		mov ecx, 32;
+	m1: shl edx, 1;
+		mov eax, 0;
+		adc eax, 48;
+		mov[esi], eax;
+		add esi, 1;
+		loop m1;
+	}
+	return temp;
+}
+
 
 int _strlen(const char * _string)
 {

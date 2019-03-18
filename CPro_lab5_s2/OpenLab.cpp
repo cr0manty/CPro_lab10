@@ -55,6 +55,5 @@ OpenLab::operator bool() const
 
 OpenLab::~OpenLab()
 {
-	//ShowWindow(hWnd, SW_HIDE);
 	DestroyWindow(hWnd);
 }

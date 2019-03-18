@@ -47,7 +47,8 @@ int _strlen(const char *);
 void _strcpy(char *, const char *);
 void _strcat(char *, const char *);
 bool _strcmp(const char *, const char *);
-void print(HDC &, POINT, int, int, const char *);
+void print(HDC &, POINT, int, int, int);
+char * asm_print(int);
 
 BOOL CALLBACK INFODLG(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK MAINFUNC(HWND, UINT, WPARAM, LPARAM);

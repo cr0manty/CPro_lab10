@@ -49,10 +49,10 @@ LRESULT CALLBACK MAINFUNC(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			lab = new OpenLab(LAB6, "Lab6", "Lab6", { 250, 250, 517, 562}, LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_MENU5)));
 			break;
 		case ID_MENU_LAB7:
-			lab = new OpenLab(LAB7, "Lab7", "Lab7", { CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT }, NULL, GRAY_BRUSH);
+			lab = new OpenLab(LAB7, "Lab7", "Lab7", { CW_USEDEFAULT, CW_USEDEFAULT, 350, 150 }, NULL, GRAY_BRUSH);
 			break;
 		case ID_MENU_LAB8:
-			lab = new OpenLab(LAB8, "Lab8", "Lab8", { 200, 200, 490, 220 }, NULL, GRAY_BRUSH);
+			lab = new OpenLab(LAB8, "Lab8", "Lab8", { 200, 200, 600, 220 }, NULL, GRAY_BRUSH);
 			break;
 		case ID_MENU_LAB9:
 			lab = new OpenLab(LAB9, "Lab9", "Lab9", { 200, 200, 300, 250 }, NULL, GRAY_BRUSH);

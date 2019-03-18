@@ -150,6 +150,7 @@ void closeProgram(HWND hWnd, DWORD _exitCode)
 		TerminateProcess(pi.hProcess, -1);
 
 	ThreadStop();
+	ShowWindow(hWnd, SW_HIDE);
 }
 
 void ReadFromFile(HWND ListBox, HWND hWnd, bool bytes)
@@ -172,15 +173,18 @@ void ReadFromFile(HWND ListBox, HWND hWnd, bool bytes)
 		NULL);
 
 	char buff[100];
-	if (myFile != INVALID_HANDLE_VALUE) {
-		int len = GetFileSize(myFile, NULL);
-		char *buffer = new char[len + 1];
+	if (myFile != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			ReadFile(myFile, buff, 99, &NumOfReadByte, NULL);
+			if (!NumOfReadByte)
+				break;
 
-		ReadFile(myFile, buffer, len, NULL, NULL);
-		buffer[len] = '\0';
+			SendMessage(ListBox, LB_ADDSTRING, 0, (LPARAM)buff);
+			buff[0] = 0;
 
-		SendMessage(ListBox, EM_REPLACESEL, 0, (LPARAM)buffer);
-		delete[] buffer;
+		} while (NumOfReadByte);
 	}
 	CloseHandle(myFile);
 }
