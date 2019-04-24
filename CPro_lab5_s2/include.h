@@ -49,6 +49,7 @@ void _strcat(char *, const char *);
 bool _strcmp(const char *, const char *);
 void print(HDC &, POINT, int, int, int);
 char * asm_print(int);
+void _create_lab(OpenLab *, WNDPROC, const char *, const char*, RECT, HMENU = NULL, int = WHITE_BRUSH);
 
 BOOL CALLBACK INFODLG(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK MAINFUNC(HWND, UINT, WPARAM, LPARAM);

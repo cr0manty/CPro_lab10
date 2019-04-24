@@ -12,7 +12,7 @@ class OpenLab
 	ATOM register_class(const char *, int);
 	BOOL init_window(const char *, const char *);
 public:
-	OpenLab(WNDPROC, const char *, const char*, RECT, HMENU = NULL, int = WHITE_BRUSH);
+	OpenLab(WNDPROC, const char *, const char*, RECT, HMENU, int);
 	operator bool() const;
 	~OpenLab();
 };

@@ -181,6 +181,14 @@ char * asm_print(int _num)
 	return temp;
 }
 
+void _create_lab(OpenLab *_lab, WNDPROC _proc, const char * _class, const char *_window, RECT _rt, HMENU _menu, int _brush)
+{
+	if (_lab)
+		delete _lab;
+
+	_lab = new OpenLab(_proc, _class, _window, _rt, _menu, _brush);
+}
+
 
 int _strlen(const char * _string)
 {
