@@ -5,7 +5,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	LPSTR     lpCmdLine,
 	int       nCmdShow)
 {
-	OpenLab lab(MAINFUNC, "Lab10", "Lab10", { 10, 30, 400, 300 }, LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_MENU3)));
+	OpenLab *laba = nullptr;
+	_create_lab(laba, MAINFUNC, "Lab10", "Lab10", { 10, 30, 400, 300 }, LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_MENU3)));
 	MSG msg;
 
 	while (GetMessage(&msg, NULL, 0, 0))
@@ -13,6 +14,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+	delete laba;
 	return msg.wParam;
 }
 
